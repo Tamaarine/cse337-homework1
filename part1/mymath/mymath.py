@@ -36,12 +36,12 @@ def pubkExp(k):
     # Picking a value for e, which is an integer
     # 1 < e < k, such that e is a co-prime of k
     # gcd(e, k) == 1
-    for i in range(2, k):
-        if gcd(i, k) == 1:
-            return i
-    # Somehow unable to find coprime between two numbers
-    return -1 
-
+    e = rd.randint(2, k - 1)
+    
+    while gcd(e, k) != 1:
+        e = rd.randint(2, k - 1)
+    return e
+    
 # Generate private key exponent
 def prikExp(x, y):
     '''
@@ -58,7 +58,9 @@ def prikExp(x, y):
     This function returns the modular multiplicative inverse if it exist.
     Otherwise return -1
     '''
-    x, y = y, x # Swap em because I used them in the context differently
+    # If x < y then swap them otherwise keep them the same
+    if x < y:
+        x, y = y, x # Swap em because I used them in the context differently
     table = []
     first_row = [x, y, x // y, x % y, 0, 1, 0 - x // y * 1] # First row
     if first_row[3] == 0 and first_row[1] != 1:
