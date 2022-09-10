@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "Part1 Test",
+      "setup": "sudo -H pip3 install pytest pytest-timeout",
+      "run": "pytest --timeout=30 part1/",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 1,
+      "points": null
+    },
+    {
+      "name": "Part 2 Test",
+      "setup": "sudo -H pip3 install pytest pytest-timeout",
+      "run": "pytest --timeout=20 part2/",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 1,
+      "points": null
+    }
+  ]
+}
