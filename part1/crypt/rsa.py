@@ -21,7 +21,7 @@ class Rsa:
         K = mymath.lcm(self.p - 1, self.q - 1)
         e = mymath.pubkExp(K) # Generate e, public key
         
-        c = pow(m, e, self.n)
+        c = mymath.fast_mod(m, e, self.n)
         
         return c, e
 
@@ -38,6 +38,6 @@ class Rsa:
         
         d = mymath.prikExp(K, e)
         
-        m = pow(c, d, self.n)
+        m = mymath.fast_mod(c, d, self.n)
         
         return m

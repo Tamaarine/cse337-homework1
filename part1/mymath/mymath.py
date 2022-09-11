@@ -61,6 +61,7 @@ def prikExp(x, y):
     # If x < y then swap them otherwise keep them the same
     if x < y:
         x, y = y, x # Swap em because I used them in the context differently
+        
     table = []
     first_row = [x, y, x // y, x % y, 0, 1, 0 - x // y * 1] # First row
     if first_row[3] == 0 and first_row[1] != 1:
@@ -101,3 +102,41 @@ def hash(s):
     for letter in s:
         sum += ord(letter)
     return sum
+
+def fast_mod(a, b, m):
+    '''
+    Doing fast exponentiation with large numbers
+    to be memory efficient.
+    a -> The base number
+    b -> Exponent
+    m -> The mod to take the a^b by
+    '''
+    # The way that fast exponentitation works is that
+    # you basically check if the current base is even or odd
+    # if it is odd, you just take odd one out and rest are even,
+    # example, a^513 -> a * a^512. You store that result into extra
+    # which will be used later.
+    # Then the rest of the even number goes through the multiplication process
+    # you update a to be a raised to the power by 2, so a * a, then take the mod.
+    # After the if-statement you do rightshift of b to divide by 2.
+    
+    # 45 ** 101 mod 59
+    # Store 45 mod 59 = 49 into extra.
+    # 45 ** 100 mod 59. a is current 45.
+    # 45 * 45 = 2025 mod 59. a = 19, b = 50
+    # 19 * 19 = 361 mod 59. a = 7, b = 25
+    # 7 * 7 = 49 mod 59. a = 49, b = 12 
+    # 49 * 49 = 2401 mod 59. a = 41, b = 6
+    # 41 * 41 = 1681 mod 59. a = 29, b = 3
+    # 29 * 29 = 841 mod 59. a = 15, b = 1
+    # so the result is (15 * 49) mod 59 = 27
+    extra = 1
+    while b > 1:
+        if b % 2 == 1:
+            extra = b % m
+            b -= 1
+        a = (a ** 2) % m
+        # Bitshift by 1 to half it
+        b = b >> 1
+    return (a * extra) % m
+    
