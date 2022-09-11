@@ -4,7 +4,7 @@ def isPrime(n):
     # To check if a number is prime
     # just loop through every integer from 2 to sqrt(n)
     # if it evenly divides it then it is not a prime.
-    if n == 1:
+    if n <= 1:
         return False
     
     maxCheck = int(n ** 1/2)
@@ -61,6 +61,7 @@ def prikExp(x, y):
     # If x < y then swap them otherwise keep them the same
     if x < y:
         x, y = y, x # Swap em because I used them in the context differently
+        # bigger number goes x, and smaller one into y
         
     table = []
     first_row = [x, y, x // y, x % y, 0, 1, 0 - x // y * 1] # First row
@@ -133,7 +134,7 @@ def fast_mod(a, b, m):
     extra = 1
     while b > 1:
         if b % 2 == 1:
-            extra = b % m
+            extra = (extra * a) % m
             b -= 1
         a = (a ** 2) % m
         # Bitshift by 1 to half it
