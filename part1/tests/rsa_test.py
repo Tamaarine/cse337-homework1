@@ -59,35 +59,35 @@ class TestRSA:
         msg = 'Top secret message'
         rsa = Rsa(728)
         c, e = rsa.encrypt(hash(msg))
-        rsa.decrypt(c, e) == hash(msg)
+        assert rsa.decrypt(c, e) == hash(msg)
 
     def test_rsa_2(self):
         msg = 'Tranfer $5000 to ME!'
         rsa = Rsa(99)
         c, e = rsa.encrypt(hash(msg))
-        rsa.decrypt(c, e) == hash(msg)
+        assert rsa.decrypt(c, e) == hash(msg)
 
     def test_rsa_3(self):
         msg = 'Encryption is fun!'
         rsa = Rsa(2029)
         c, e = rsa.encrypt(hash(msg))
-        rsa.decrypt(c, e) == hash(msg)
+        assert rsa.decrypt(c, e) == hash(msg)
 
     def test_rsa_4(self):
         msg = 'Seawolves! Rise and shine.'
         rsa = Rsa(911)
         c, e = rsa.encrypt(hash(msg))
-        rsa.decrypt(c, e) == hash(msg)
+        assert rsa.decrypt(c, e) == hash(msg)
 
 
     def test_rsa_6(self):
         msg = 'You know who is here! Run'
         rsa = Rsa(628)
         c, e = rsa.encrypt(hash(msg))
-        rsa.decrypt(c, e) == hash(msg)
+        assert rsa.decrypt(c, e) == hash(msg)
 
     def test_rsa_7(self):
         msg = 'You know who is here! Run'
         rsa = Rsa(5738)
         c, e = rsa.encrypt(hash(msg))
-        rsa.decrypt(c, e) == hash(msg)
+        assert rsa.decrypt(c, e) == hash(msg)
