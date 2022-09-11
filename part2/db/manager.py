@@ -27,7 +27,14 @@ def add_task(desc, priority):
 
 # returns list of tasks in the task file.
 def get_all_tasks():
-    pass
+    if is_tasks_file_exists():
+        # Only read all the lines as list
+        # and return them if it exists
+        with open(tasks_file, 'r') as f:
+            f.readline() # Skip the first line header
+            return f.readlines()
+    else:
+        return ""
 
 # remove a task from the task file.
 def remove_task(id):
