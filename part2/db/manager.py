@@ -4,11 +4,22 @@ tasks_file = os.path.join(os.getcwd(), 'part2','db', 'tasks.csv')
 
 # creates tasks file is none exists
 def create():
-    pass
+    if not is_tasks_file_exists():
+        # File doesn't exist, create it with
+        # and return truthy value
+        with open(tasks_file, "w") as f:
+            f.write('ID,DESCRIPTION,PRIORITY,STATUS\n')
+        return 1
+    # File already exists return 0
+    return 0
 
 # check if tasks file exists
 def is_tasks_file_exists():
-    pass
+    # tasks_file doesn't exist return false 
+    if not os.path.exists(tasks_file):
+        return False
+    # tasks_file exist return true
+    return True
 
 # adds a task to the task file and returns the task id.
 def add_task(desc, priority):
