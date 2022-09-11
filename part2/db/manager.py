@@ -27,6 +27,15 @@ def add_task(desc, priority):
 
 # returns list of tasks in the task file.
 def get_all_tasks():
+    '''
+    This function actually opens up the file.
+    Skip the header of the tasks.csv file.
+    Then read all the rest of the line by calling readlines
+    and return the list of lines read.
+    
+    If file doesn't exist return None.
+    
+    '''
     if is_tasks_file_exists():
         # Only read all the lines as list
         # and return them if it exists
@@ -34,7 +43,8 @@ def get_all_tasks():
             f.readline() # Skip the first line header
             return f.readlines()
     else:
-        return ""
+        # Return none if file doesn't exist
+        return None
 
 # remove a task from the task file.
 def remove_task(id):
