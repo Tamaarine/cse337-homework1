@@ -36,6 +36,10 @@ def pubkExp(k):
     # Picking a value for e, which is an integer
     # 1 < e < k, such that e is a co-prime of k
     # gcd(e, k) == 1
+    if k - 1 <= 2:
+        # Error value
+        return -1
+
     e = rd.randint(2, k - 1)
     
     while gcd(e, k) != 1:
@@ -62,7 +66,9 @@ def prikExp(x, y):
     if x < y:
         x, y = y, x # Swap em because I used them in the context differently
         # bigger number goes x, and smaller one into y
-        
+    if y == 0:
+        return -1
+
     table = []
     first_row = [x, y, x // y, x % y, 0, 1, 0 - x // y * 1] # First row
     if first_row[3] == 0 and first_row[1] != 1:
