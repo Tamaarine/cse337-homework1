@@ -23,28 +23,53 @@ def is_tasks_file_exists():
 
 # adds a task to the task file and returns the task id.
 def add_task(desc, priority):
-    pass
+    '''
+    Add a task with the specified parameter. Create the tasks.csv
+    if it doesn't exist already. 
+    
+    After creating it or exist. Append to the file the specified tasks.
+    
+    Return the task ID that the task was added. 
+    
+    '''
+    create()
+    
+    # Get the parsed dictionary
+    dict_tasks = parse_tasks_file(get_all_tasks())
+    
+    if is_empty_dict(dict_tasks):
+        # dict_tasks is empty, assign 1 as its starting id
+        new_id = 1
+    else:
+        # dict_tasks is not empty, pick up where we left off
+        last_id = sorted(dict_tasks.keys())[-1]
+        new_id = last_id + 1
+    
+    # Add in the new task with last_id + 1 as id
+    with open(tasks_file, 'a') as f:
+        f.write(f"{new_id},{desc},{priority},Incomplete\n")
+    
+    return new_id
 
 # returns list of tasks in the task file.
 def get_all_tasks():
     '''
-    This function actually opens up the file.
+    This function actuallys open up the file.
     Skip the header of the tasks.csv file.
-    Then read all the rest of the line by calling readlines
+    Read all the rest of the line by calling readlines
     and return the list of lines read.
     
-    If file doesn't exist return None.
+    If the file doesn't exist create it.
+    
+    Return either [] or list of lines read
     
     '''
-    if is_tasks_file_exists():
-        # Only read all the lines as list
-        # and return them if it exists
-        with open(tasks_file, 'r') as f:
-            f.readline() # Skip the first line header
-            return f.readlines()
-    else:
-        # Return none if file doesn't exist
-        return None
+    create()
+    
+    # Read all the lines as list
+    with open(tasks_file, 'r') as f:
+        f.readline() # Skip the first line header
+        return f.readlines()
 
 # remove a task from the task file.
 def remove_task(id):
@@ -69,3 +94,40 @@ def search(id, desc, priority):
 # sort the tasks in the task file. Default order is 1.
 def sort(order):
     pass
+
+def parse_tasks_file(tasks):
+    '''
+    This function will parse the given parameter called
+    tasks, which is just the return value from
+    manager.get_all_tasks() -> It return the raw lines
+    from the tasks.csv file and process it line by line.
+    
+    The headers are skipped when it is passed into tasks.
+    The tasks might be an empty array, in that case 
+    an empty dictionary is returned.
+    
+    Dictionary format is
+    {
+        ID: {'DESCRIPTION': <>, 'PRIORITY': <>, 'STATUS': <>},
+        ...
+    }
+    
+    Returns the dictionary parsed.
+    '''
+    dict_task = {}
+    
+    # Go through each task line, strip '\n' from the end
+    # then split it by ',' and store it into dictionary
+    for task in tasks:
+        task = task.strip('\n')
+        splitted = task.split(',')
+        ID = int(splitted[0])
+        dict_task[ID] = {
+            'DESCRIPTION': splitted[1],
+            'PRIORITY': splitted[2],
+            'STATUS': splitted[3]
+            }
+    return dict_task
+    
+def is_empty_dict(dict):
+    return len(dict) == 0
