@@ -115,4 +115,6 @@ def search_cmd(id, desc, priority):
 
 # command to sort the tasks in specified order
 def sort_cmd(order):
-    pass
+    if order == "-d":
+        return manager.sort(2)
+    return manager.sort()
