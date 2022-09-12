@@ -222,7 +222,95 @@ def update_desc(id, desc):
 
 # search for a task in the task file.
 def search(id, desc, priority):
-    pass
+    '''
+    Return a string.
+    
+    A string of all the tasks that satisfied requirements in the format
+    'id,description,priority,status\nid,description,priority,status\n...'
+    
+    OR 
+    
+    '' if no matching task
+    '''
+    
+    dict_task = parse_tasks_file(get_all_tasks())
+    
+    # If id is specified there can only be max of 1 result
+    if id != None:
+        # Shorter syntax to find the task in dict_task
+        # returns a list of dictionary
+        ret_dict = [dict_task[key] for key in dict_task if key == id]
+        
+        # Make sure there is at least one result in it
+        if ret_dict == []:
+            return ""
+        
+        ret_dict = ret_dict[-1]        
+        w_desc = ret_dict['DESCRIPTION']
+        w_priority = int(ret_dict['PRIORITY']) # The only one that's int
+        w_status = ret_dict['STATUS']
+        w_formatted = f"{id},{w_desc},{w_priority},{w_status}\n"
+        
+        # Both search are present, need to check both
+        if desc != None and priority != None:
+            if w_desc.lower() == desc.lower() and \
+                w_priority == priority:
+                return w_formatted
+            return ""
+        elif desc != None:
+            if w_desc.lower() == desc.lower():
+                return w_formatted
+            return ""
+        elif priority != None:
+            if w_priority == priority:
+                return w_formatted
+            return ""
+        else:
+            return w_formatted
+    else:
+        # id is not specified. Either description or priority
+        # Take advantage of '' in 'anything' = True to take
+        # care of the case that desc == None
+        
+        result_dict = {}
+        
+        # Filter through the original dict_task by desc
+        # if desc isn't None. Otherwise, result_dict is the original
+        # dictionary
+        if desc != None:
+            temp = {}
+            
+            desc = desc.lower()
+            for key in dict_task:
+                task = dict_task[key]
+                if task['DESCRIPTION'].lower() == desc:
+                    temp[key] = task    
+            result_dict = temp
+        else:
+            result_dict = dict_task
+        
+        # Then filter through priority if priority isn't None
+        # if desc was None. result_dict will be dict_task
+        # meaning all tasks are in result_dict and will
+        # be filtered by priority.
+        # Doing this way is much more concise
+        if priority != None:
+            temp = {}
+            
+            for key in result_dict:
+                task = result_dict[key]
+                if int(task['PRIORITY']) == priority:
+                    temp[key] = task    
+            result_dict = temp
+
+        ret = ""
+        for key in result_dict:
+            result = result_dict[key]
+            r_desc = result['DESCRIPTION']
+            r_priority = result['PRIORITY']
+            r_status = result['STATUS']
+            ret += f"{key},{r_desc},{r_priority},{r_status}\n"
+        return ret
 
 # sort the tasks in the task file. Default order is 1.
 def sort(order):
