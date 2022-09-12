@@ -201,7 +201,24 @@ def change_priority(id, priority):
 
 # update the task description of a task in the task file.
 def update_desc(id, desc):
-    pass
+    '''
+    Return true if the description of the task is updated.
+    
+    Return false if the task <id> doesn't exist
+    '''
+    
+    dict_task = parse_tasks_file(get_all_tasks())
+    
+    if id in dict_task:
+        dict_task[id]['DESCRIPTION'] = desc
+        
+        # write it back yo
+        write_back(dict_task)
+        
+        return True
+    else:
+        # id doesn't exist!
+        return False
 
 # search for a task in the task file.
 def search(id, desc, priority):
