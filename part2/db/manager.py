@@ -84,7 +84,6 @@ def add_task(desc, priority):
     Return the task ID that the task was added. 
     
     '''
-    create()
     
     # Get the parsed dictionary
     dict_task = parse_tasks_file(get_all_tasks())
@@ -181,7 +180,24 @@ def complete_task(id):
 
 # change the priority of a task in the task file.
 def change_priority(id, priority):
-    pass
+    '''
+    Return true if the priority of the task is changed.
+    
+    Return false if the task <id> doesn't exist
+    '''
+    
+    dict_task = parse_tasks_file(get_all_tasks())
+    
+    if id in dict_task:
+        dict_task[id]['PRIORITY'] = priority
+        
+        # write back
+        write_back(dict_task)
+        
+        return True
+    else:
+        # id doesn't exist man
+        return False
 
 # update the task description of a task in the task file.
 def update_desc(id, desc):
