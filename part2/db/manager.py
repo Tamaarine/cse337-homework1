@@ -40,6 +40,20 @@ def parse_tasks_file(tasks):
 def is_empty_dict(dict):
     return len(dict) == 0
 
+def write_back(dict_tasks):
+    '''
+    Function that takes in dict_tasks and write to the
+    file. 
+    '''
+    with open(tasks_file, 'w') as f:
+        f.write(header)
+        for id in dict_tasks:
+            current_task = dict_tasks[id]
+            description = current_task['DESCRIPTION']
+            priority = current_task['PRIORITY']
+            status = current_task['STATUS']
+            f.write(f"{id},{description},{priority},{status}\n")
+
 # creates tasks file is none exists
 def create():
     if not is_tasks_file_exists():
@@ -135,14 +149,7 @@ def remove_task(id):
         del dict_tasks[len(dict_tasks)]
         
         # Then we perform the writeback to the file
-        with open(tasks_file, 'w') as f:
-            f.write(header)
-            for id in dict_tasks:
-                current_task = dict_tasks[id]
-                description = current_task['DESCRIPTION']
-                priority = current_task['PRIORITY']
-                status = current_task['STATUS']
-                f.write(f"{id},{description},{priority},{status}\n")
+        write_back(dict_tasks)
         
         return True
     else:
