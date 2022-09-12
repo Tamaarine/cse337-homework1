@@ -94,11 +94,17 @@ def change_priority_cmd(id, priority):
         return f"Changed priority of task {id} to {priority}"
     return f"Priority of task {id} could not be changed"
         
-
 # command to edit task description
 def update_cmd(id, desc):
-    pass
-
+    if desc == "":
+        return f"Failed to update task {id}"
+    
+    ret = manager.update_desc(id, desc)
+    
+    if ret:
+        return f"Task {id} updated"
+    return f"Failed to update task {id}"
+    
 # command to search a task by id, description, or priority
 def search_cmd(id, desc, priority):
     pass
