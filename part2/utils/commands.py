@@ -58,7 +58,13 @@ def list_all_tasks_cmd():
     
 # command to add a task
 def add_task_cmd(task, priority):
-    pass
+    if task == "" or priority < 0:
+        # Do not take in empty string
+        return "Failed to add task"
+        
+    # Valid arg add it 
+    id = manager.add_task(task, priority)
+    return f"Task added and assigned ID {id}"
 
 # command to delete a task
 def remove_task_cmd(id):
