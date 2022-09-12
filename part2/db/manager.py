@@ -1,6 +1,44 @@
 import os
 
 tasks_file = os.path.join(os.getcwd(), 'part2','db', 'tasks.csv')
+header = 'ID,DESCRIPTION,PRIORITY,STATUS\n'
+
+def parse_tasks_file(tasks):
+    '''
+    This function will parse the given parameter called
+    tasks, which is just the return value from
+    manager.get_all_tasks() -> It return the raw lines
+    from the tasks.csv file and process it line by line.
+    
+    The headers are skipped when it is passed into tasks.
+    The tasks might be an empty array, in that case 
+    an empty dictionary is returned.
+    
+    Dictionary format is
+    {
+        ID: {'DESCRIPTION': <>, 'PRIORITY': <>, 'STATUS': <>},
+        ...
+    }
+    
+    Returns the dictionary parsed.
+    '''
+    dict_task = {}
+    
+    # Go through each task line, strip '\n' from the end
+    # then split it by ',' and store it into dictionary
+    for task in tasks:
+        task = task.strip('\n')
+        splitted = task.split(',')
+        ID = int(splitted[0])
+        dict_task[ID] = {
+            'DESCRIPTION': splitted[1],
+            'PRIORITY': splitted[2],
+            'STATUS': splitted[3]
+            }
+    return dict_task
+    
+def is_empty_dict(dict):
+    return len(dict) == 0
 
 # creates tasks file is none exists
 def create():
@@ -73,7 +111,43 @@ def get_all_tasks():
 
 # remove a task from the task file.
 def remove_task(id):
-    pass
+    '''
+    Return true if the id was successfully removed from tasks.csv
+    
+    Return false if the id doesn't exist in tasks.csv
+    '''
+    
+    dict_tasks = parse_tasks_file(get_all_tasks())
+    
+    if id in dict_tasks:
+        # Perform the replacement
+        # i.e. 
+        # {1: {x}, 2: {y}, 3: {z}, 4:{a}}, removing 2
+        # start at key 2, the object it points to will be z
+        # {1: {x}, 2:{z}, 3:{z}, 4:{a}}. then at key 3, be key 4
+        # {1: {x}, 2:{z}, 3:{a}, 4:{a}}. then you stop at last key, remove it
+        # {1: {x}, 2:{z}, 3:{a}}. Key 2: {y} is removed everything shifted
+        # goes from [id, len(keys))
+        for i in range(id, len(dict_tasks.keys())):
+            dict_tasks[i] = dict_tasks[i + 1]
+        
+        # Delete last key
+        del dict_tasks[len(dict_tasks)]
+        
+        # Then we perform the writeback to the file
+        with open(tasks_file, 'w') as f:
+            f.write(header)
+            for id in dict_tasks:
+                current_task = dict_tasks[id]
+                description = current_task['DESCRIPTION']
+                priority = current_task['PRIORITY']
+                status = current_task['STATUS']
+                f.write(f"{id},{description},{priority},{status}\n")
+        
+        return True
+    else:
+        return False
+        
 
 # complete a task in the task file.
 def complete_task(id):
@@ -94,40 +168,3 @@ def search(id, desc, priority):
 # sort the tasks in the task file. Default order is 1.
 def sort(order):
     pass
-
-def parse_tasks_file(tasks):
-    '''
-    This function will parse the given parameter called
-    tasks, which is just the return value from
-    manager.get_all_tasks() -> It return the raw lines
-    from the tasks.csv file and process it line by line.
-    
-    The headers are skipped when it is passed into tasks.
-    The tasks might be an empty array, in that case 
-    an empty dictionary is returned.
-    
-    Dictionary format is
-    {
-        ID: {'DESCRIPTION': <>, 'PRIORITY': <>, 'STATUS': <>},
-        ...
-    }
-    
-    Returns the dictionary parsed.
-    '''
-    dict_task = {}
-    
-    # Go through each task line, strip '\n' from the end
-    # then split it by ',' and store it into dictionary
-    for task in tasks:
-        task = task.strip('\n')
-        splitted = task.split(',')
-        ID = int(splitted[0])
-        dict_task[ID] = {
-            'DESCRIPTION': splitted[1],
-            'PRIORITY': splitted[2],
-            'STATUS': splitted[3]
-            }
-    return dict_task
-    
-def is_empty_dict(dict):
-    return len(dict) == 0
