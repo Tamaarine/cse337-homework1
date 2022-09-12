@@ -76,7 +76,11 @@ def remove_task_cmd(id):
 
 # command to complete a task
 def complete_task_cmd(id):
-    pass
+    ret = manager.complete_task(id)
+    
+    if ret:
+        return f"Task {id} completed"
+    return f"Task {id} could not be completed"        
 
 # command to edit task priority
 def change_priority_cmd(id, priority):
