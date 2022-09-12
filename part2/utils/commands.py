@@ -58,8 +58,8 @@ def list_all_tasks_cmd():
     
 # command to add a task
 def add_task_cmd(task, priority):
-    if task == "" or priority < 0:
-        # Do not take in empty string
+    if task == "" or priority <= 0:
+        # Do not take in empty string or priority <= 0
         return "Failed to add task"
         
     # Valid arg add it 
@@ -84,7 +84,16 @@ def complete_task_cmd(id):
 
 # command to edit task priority
 def change_priority_cmd(id, priority):
-    pass
+    if priority <= 0:
+        # Priority <= 0 we do not change
+        return f"Priority of task {id} could not be changed"
+        
+    ret = manager.change_priority(id, priority)
+    
+    if ret:
+        return f"Changed priority of task {id} to {priority}"
+    return f"Priority of task {id} could not be changed"
+        
 
 # command to edit task description
 def update_cmd(id, desc):
