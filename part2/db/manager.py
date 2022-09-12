@@ -40,15 +40,15 @@ def parse_tasks_file(tasks):
 def is_empty_dict(dict):
     return len(dict) == 0
 
-def write_back(dict_tasks):
+def write_back(dict_task):
     '''
-    Function that takes in dict_tasks and write to the
+    Function that takes in dict_task and write to the
     file. 
     '''
     with open(tasks_file, 'w') as f:
         f.write(header)
-        for id in dict_tasks:
-            current_task = dict_tasks[id]
+        for id in dict_task:
+            current_task = dict_task[id]
             description = current_task['DESCRIPTION']
             priority = current_task['PRIORITY']
             status = current_task['STATUS']
@@ -87,14 +87,14 @@ def add_task(desc, priority):
     create()
     
     # Get the parsed dictionary
-    dict_tasks = parse_tasks_file(get_all_tasks())
+    dict_task = parse_tasks_file(get_all_tasks())
     
-    if is_empty_dict(dict_tasks):
-        # dict_tasks is empty, assign 1 as its starting id
+    if is_empty_dict(dict_task):
+        # dict_task is empty, assign 1 as its starting id
         new_id = 1
     else:
-        # dict_tasks is not empty, pick up where we left off
-        last_id = sorted(dict_tasks.keys())[-1]
+        # dict_task is not empty, pick up where we left off
+        last_id = sorted(dict_task.keys())[-1]
         new_id = last_id + 1
     
     # Add in the new task with last_id + 1 as id
@@ -131,9 +131,9 @@ def remove_task(id):
     Return false if the id doesn't exist in tasks.csv
     '''
     
-    dict_tasks = parse_tasks_file(get_all_tasks())
+    dict_task = parse_tasks_file(get_all_tasks())
     
-    if id in dict_tasks:
+    if id in dict_task:
         # Perform the replacement
         # i.e. 
         # {1: {x}, 2: {y}, 3: {z}, 4:{a}}, removing 2
@@ -142,17 +142,18 @@ def remove_task(id):
         # {1: {x}, 2:{z}, 3:{a}, 4:{a}}. then you stop at last key, remove it
         # {1: {x}, 2:{z}, 3:{a}}. Key 2: {y} is removed everything shifted
         # goes from [id, len(keys))
-        for i in range(id, len(dict_tasks.keys())):
-            dict_tasks[i] = dict_tasks[i + 1]
+        for i in range(id, len(dict_task.keys())):
+            dict_task[i] = dict_task[i + 1]
         
         # Delete last key
-        del dict_tasks[len(dict_tasks)]
+        del dict_task[len(dict_task)]
         
         # Then we perform the writeback to the file
-        write_back(dict_tasks)
+        write_back(dict_task)
         
         return True
     else:
+        # id doesn't exist
         return False
         
 
