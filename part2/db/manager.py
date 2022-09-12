@@ -313,5 +313,32 @@ def search(id, desc, priority):
         return ret
 
 # sort the tasks in the task file. Default order is 1.
-def sort(order):
-    pass
+def sort(order=1):
+    '''
+    Sort the tasks in dict_task. The default order is 1
+    which meanas to sort it ascendingly. 
+    
+    2 means to sort it descendingly 
+    '''
+    
+    dict_task = parse_tasks_file(get_all_tasks())
+    
+    # The way we are going to do it is flatten out the dictionary
+    # into a list basically, and just have to call sorted ez
+    
+    # The list of lists returned is in the form
+    # [[id, desc, priority, status], ...]
+    flatten_task = [[key, dict_task[key]['DESCRIPTION'], \
+        dict_task[key]['PRIORITY'], dict_task[key]['STATUS']] \
+        for key in dict_task]
+    
+    if order == 1:
+        flatten_task.sort(key=lambda x : x[2]) 
+    else:
+        flatten_task.sort(key=lambda x : x[2], reverse=True) 
+    
+    ret = ""
+    for task in flatten_task:
+        ret += f"{task[0]},{task[1]},{task[2]},{task[3]}\n"    
+        
+    return ret
