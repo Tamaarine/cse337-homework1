@@ -107,7 +107,11 @@ def update_cmd(id, desc):
     
 # command to search a task by id, description, or priority
 def search_cmd(id, desc, priority):
-    pass
+    ret = manager.search(id, desc, priority)
+
+    if ret != "":
+        return ret
+    return "Task not found" 
 
 # command to sort the tasks in specified order
 def sort_cmd(order):
