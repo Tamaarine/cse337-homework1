@@ -18,41 +18,6 @@ def showhelp():
     print('-i or --id <ID> task ID. Must use with -s for search task with ID.')
     print('-dp or --description <TEXT> task description. Must use with -s for search task with description.')
 
-def parse_tasks_file(tasks):
-    '''
-    This function will parse the given parameter called
-    tasks, which is just the return value from
-    manager.get_all_tasks() -> It return the raw lines
-    from the tasks.csv file and process it line by line.
-    
-    The headers are skipped when it is passed into tasks.
-    And it is guranteed to have some lines in it. i.e. it will
-    have tasks in it for the dictionary to store.
-    
-    Dictionary format is
-    {
-        ID: {'DESCRIPTION': <>, 'PRIORITY': <>, 'STATUS': <>},
-        ...
-    }
-    
-    After going through each tasks, it returns the dictionary
-    
-    '''
-    dict_task = {}
-    
-    # Go through each task line, strip '\n' from the end
-    # then split it by ',' and store it into dictionary
-    for task in tasks:
-        task = task.strip('\n')
-        splitted = task.split(',')
-        ID = int(splitted[0])
-        dict_task[ID] = {
-            'DESCRIPTION': splitted[1],
-            'PRIORITY': splitted[2],
-            'STATUS': splitted[3]
-            }
-    return dict_task
-
 # command to list all tasks
 def list_all_tasks_cmd():
     '''
@@ -79,7 +44,8 @@ def list_all_tasks_cmd():
     if tasks == [] or tasks == None:
         return "TODO List empty. Add some tasks."
     
-    dict_task = parse_tasks_file(tasks)
+    # Call the parse_tasks_file from manager
+    dict_task = manager.parse_tasks_file(tasks)
     
     ret = ""
     for id in dict_task:
