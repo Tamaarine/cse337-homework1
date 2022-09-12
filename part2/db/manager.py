@@ -159,7 +159,25 @@ def remove_task(id):
 
 # complete a task in the task file.
 def complete_task(id):
-    pass
+    '''
+    Return true if the task <id> is set to complete.
+    
+    Return false if the task <id> doesn't exist
+    '''
+    
+    dict_task = parse_tasks_file(get_all_tasks())
+    
+    if id in dict_task:
+        dict_task[id]['STATUS'] = 'Complete'
+        
+        # Do the write back
+        write_back(dict_task)
+        
+        return True
+    else:
+        # id doesn't exist bro
+        return False
+    
 
 # change the priority of a task in the task file.
 def change_priority(id, priority):
