@@ -68,7 +68,11 @@ def add_task_cmd(task, priority):
 
 # command to delete a task
 def remove_task_cmd(id):
-    pass
+    ret = manager.remove_task(id)
+    
+    if ret:
+        return f"Removed task ID {id}"
+    return f"Failed to remove task ID {id}"    
 
 # command to complete a task
 def complete_task_cmd(id):
