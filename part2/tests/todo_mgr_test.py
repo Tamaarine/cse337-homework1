@@ -474,8 +474,8 @@ class TestTodoManager:
             f.write('3,Write journal,5,Incomplete\n')
             f.write('4,Party,1,Complete\n')
             f.write('5,Go to class,10,Incomplete\n')
-        parseArgs(['main.py', '-l']).split('\n') == ['1,Exercise,2,Complete', '2,Eat food,1,Complete', '3,Write journal,5,Incomplete', '4,Party,1,Complete', '5,Go to class,10,Incomplete', '']
-        parseArgs(['main.py', '--list']).split('\n') == ['1,Exercise,2,Complete', '2,Eat food,1,Complete', '3,Write journal,5,Incomplete', '4,Party,1,Complete', '5,Go to class,10,Incomplete', '']
+        assert parseArgs(['main.py', '-l']).split('\n') == ['1,Exercise,2,Complete', '2,Eat food,1,Complete', '3,Write journal,5,Incomplete', '4,Party,1,Complete', '5,Go to class,10,Incomplete', '']
+        assert parseArgs(['main.py', '--list']).split('\n') == ['1,Exercise,2,Complete', '2,Eat food,1,Complete', '3,Write journal,5,Incomplete', '4,Party,1,Complete', '5,Go to class,10,Incomplete', '']
 
     def test_parse_args_add_task(self):
         with open(tasks_file, 'w') as f:
