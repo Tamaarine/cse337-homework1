@@ -14,7 +14,18 @@ def parseArgs(args):
             commands.showhelp()
             break
         elif arg == "-l" or arg == "--list":
-            return commands.list_all_tasks_cmd()
+            # Why is this one just not commands.manager.get_all_tasks()???
+            tasks = commands.manager.get_all_tasks()
+            dict_task = commands.manager.parse_tasks_file(tasks)
+            
+            ret = ""
+            for key, val in dict_task.items(): 
+                desc = val['DESCRIPTION']
+                priority = val['PRIORITY']
+                status = val['STATUS']
+                ret += f"{key},{desc},{priority},{status}\n"
+            
+            return ret            
         elif arg == "-a" or arg == "--add":
             # adding task, the next couple arguments
             # there should be at least 3 arguments after
@@ -152,29 +163,44 @@ def parseArgs(args):
             if i + 1 >= len(args):
                 return "Search Criteria Missing"
             
-            temp_i = i + 1
+            # Look at only subset, maximum of             
+            temp_i = 0
+            rel_args = args[i + 1: i + 7]
+            len_rel_args = len(rel_args)
             
-            while temp_i < len(args):
-                temp_arg = args[temp_i]
+            while temp_i < len_rel_args:
+                temp_arg = rel_args[temp_i]
                 
                 if temp_arg == "-i" or temp_arg == "--id":
-                    if temp_i + 1 < len(args):
-                        id = args[temp_i + 1]
+                    if temp_i + 1 < len_rel_args:
+                        id = rel_args[temp_i + 1]
                         temp_i += 1 
                     else:
                         return "Error: Empty id to search"                
                 elif temp_arg == "-dp" or temp_arg == "--description":
-                    if temp_i + 1 < len(args):
-                        desc = args[temp_i + 1]
+                    if temp_i + 1 < len_rel_args:
+                        desc = rel_args[temp_i + 1]
                         temp_i += 1
                     else:
                         return "Error: Empty description to search"
                 elif temp_arg == "-p" or temp_arg == "--priority":
-                    if temp_i + 1 < len(args):
-                        priority = args[temp_i + 1]
+                    if temp_i + 1 < len_rel_args:
+                        priority = rel_args[temp_i + 1]
                         temp_i += 1
                     else:
                         return "Error: Empty priority to search"
+                else:
+                    tasks = commands.manager.get_all_tasks()
+                    dict_task = commands.manager.parse_tasks_file(tasks)
+                    
+                    ret = ""
+                    for key, val in dict_task.items(): 
+                        desc = val['DESCRIPTION']
+                        priority = val['PRIORITY']
+                        status = val['STATUS']
+                        ret += f"{key},{desc},{priority},{status}\n"
+                    
+                    return ret           
                 temp_i += 1
             
             try:
