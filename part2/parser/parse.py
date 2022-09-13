@@ -19,15 +19,43 @@ def parseArgs(args):
             commands.showhelp()
             break
         elif arg == "-l" or arg == "--list":
-            commands.list_all_tasks_cmd()
+            return commands.list_all_tasks_cmd()
         elif arg == "-a" or arg == "--add":
-            adding_task = True
-            commands.add_task_cmd()
-        elif arg == "-p" or arg == "--priority":
-            # Must be used with options -a or -s
-            # If it is with -a, then it is updating the priority
-            # with -s it is searching by priority
-            pass
+            # adding task, the next couple arguments
+            # there should be at least 3 arguments after
+            # the description, -p/--priority, PRIORITY
+            # Otherwise print error
+            if i + 1 < len(args):    
+                desc = args[i + 1]
+            else:
+                return "Error: Description not provided"
+            
+            if i + 2 >= len(args):
+                # The -p flag doesn't exist
+                return "Error: Incorrect priority option"
+            
+            if args[i + 2] != "-p" and args[i + 2] != "--priority":
+                return "Error: Incorrect priority option"
+            
+            # -p/--priority exist, now checking the parameter
+            if i + 3 >= len(args):
+                return "Error: Cannot add a task with empty priority"
+            
+            # Try to parse it if it doesn't work return error
+            try:
+                priority = int(args[i + 3])
+            except ValueError:
+                return "Priority must be integer"
+
+            # At this point if there are any more options
+            # print error
+            if i + 4 < len(args):
+                return "Error: Found extraneous options"
+
+            # Reach here means everything is good
+            # desc is "" or more, priority is an integer call it 
+            # no extraneous options           
+            return commands.add_task_cmd(desc, priority)
         elif arg == "-r" or arg == "--remove":
             # If task exists, remove it. print "Removed task ID"
             # otherwise print "Failed to remove task ID"
