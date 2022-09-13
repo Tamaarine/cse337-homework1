@@ -6,11 +6,6 @@ def parseArgs(args):
     if len(args) == 1:
         return "Missing Required argument. Type -h to seek help"
     
-    adding_task = False
-    removing_task = False
-    searching = False
-    descending = False
-    
     i = 1 # Skip the file name    
     while i < len(args):
         arg = args[i]
@@ -62,8 +57,20 @@ def parseArgs(args):
             # The parameter that this argument takes in must be 
             # an integer. Print "Task ID missing" if it isn't present
             # if additional argument print "Found extraneous options"
-            removing_task = True
-            pass
+            if i + 1 >= len(args):
+                return "Task ID missing"
+            
+            try:
+                id = int(args[i + 1])
+            except ValueError:
+                return "Task ID must be a number"
+            
+            if i + 2 < len(args):
+                return "Error: Found extraneous options"
+            
+            # If we reach here, id is a number
+            # no extraneous options, everything gucci
+            return commands.remove_task_cmd(id)
         elif arg == "-c" or arg == "--complete":
             # Sets the task to be complete and print
             # 'Task <Number> completed' if not found still print
