@@ -20,6 +20,9 @@ def parseArgs(args):
             # there should be at least 3 arguments after
             # the description, -p/--priority, PRIORITY
             # Otherwise print error
+            if i + 4 < len(args):
+                return "Error: Found extraneous options"
+                
             if i + 1 < len(args):    
                 desc = args[i + 1]
             else:
@@ -42,11 +45,6 @@ def parseArgs(args):
             except ValueError:
                 return "Priority must be integer"
 
-            # At this point if there are any more options
-            # print error
-            if i + 4 < len(args):
-                return "Error: Found extraneous options"
-
             # Reach here means everything is good
             # desc is "" or more, priority is an integer call it 
             # no extraneous options           
@@ -57,6 +55,9 @@ def parseArgs(args):
             # The parameter that this argument takes in must be 
             # an integer. Print "Task ID missing" if it isn't present
             # if additional argument print "Found extraneous options"
+            if i + 2 < len(args):
+                return "Error: Found extraneous options"
+                
             if i + 1 >= len(args):
                 return "Task ID missing"
             
@@ -64,9 +65,6 @@ def parseArgs(args):
                 id = int(args[i + 1])
             except ValueError:
                 return "Task ID must be a number"
-            
-            if i + 2 < len(args):
-                return "Error: Found extraneous options"
             
             # If we reach here, id is a number
             # no extraneous options, everything gucci
@@ -76,14 +74,47 @@ def parseArgs(args):
             # 'Task <Number> completed' if not found still print
             # 'Task <Number> completed'
             # Takes in one integer parameter that is required
-            pass 
+            if i + 2 < len(args):
+                return "Error: Found extraneous options"
+                
+            if i + 1 >= len(args):
+                return "Task ID missing"
+            
+            try:
+                id = int(args[i + 1])
+            except ValueError:
+                return "Task ID must be a number"
+            
+            # Reached here everything gucci
+            return commands.complete_task_cmd(id)
         elif arg == "-cp" or arg == "--changepriority":
             # Takes in two parameter 
             # TNUM is the task ID
             # PNUM is the priority
             # 'Priority of task <TNUM> could not be changed' if priority ! > 0 or task not found
             # 'Changed priority of task <TNUM> to <PNUM>' otherwise
-            pass
+            if i + 3 < len(args):
+                return "Error: Found extraneous options"
+           
+            if i + 1 >= len(args):
+                # TNUM
+                return "Task ID or priority missing"
+            
+            try:
+                id = int(args[i + 1])
+            except ValueError:
+                return "Task ID must be a number"
+            
+            if i + 2 >= len(args):
+                # PNUM
+                return "Task ID or priority missing"
+            
+            try:
+                priority = int(args[i + 2])
+            except ValueError:
+                return "Task ID must be a number"
+            
+            return commands.change_priority_cmd(id, priority)
         elif arg == "-u" or arg == "--update":
             # Takes in two parameter
             # NUMBER which is the task ID
