@@ -121,7 +121,23 @@ def parseArgs(args):
             # DESCRIPTION is the string
             # 'Task <NUMBER> updated' if updated and description is not empty
             # 'Failed to update task <NUMBER>'  otherwise
-            pass
+            if i + 3 < len(args):
+                return "Error: Found extraneous options"
+            
+            if i + 1 >= len(args):
+                return "Task ID or description missing"
+            
+            try:
+                id = int(args[i + 1])
+            except ValueError:
+                return "Task ID must be a number"
+                
+            if i + 2 >= len(args):
+                return "Task ID or description missing"
+            
+            desc = args[i + 2]
+            
+            return commands.update_cmd(id, desc)
         elif arg == "-s" or arg == "--search":
             # Takes in one parameter 
             # CRITERA must either be ID or DESCRIPTION or PRIORITY
@@ -129,22 +145,53 @@ def parseArgs(args):
             # Combination is allowed. 
             # DESCRIPTION search should be case-insensitive
             # Ignore additional arguments after
-            pass
+            id = None
+            desc = None
+            priority = None
+            
+            if i + 1 >= len(args):
+                return "Search Criteria Missing"
+            
+            temp_i = i + 1
+            
+            while temp_i < len(args):
+                temp_arg = args[temp_i]
+                
+                if temp_arg == "-i" or temp_arg == "--id":
+                    if temp_i + 1 < len(args):
+                        id = args[temp_i + 1]
+                        temp_i += 1 
+                    else:
+                        return "Error: Empty id to search"                
+                elif temp_arg == "-dp" or temp_arg == "--description":
+                    if temp_i + 1 < len(args):
+                        desc = args[temp_i + 1]
+                        temp_i += 1
+                    else:
+                        return "Error: Empty description to search"
+                elif temp_arg == "-p" or temp_arg == "--priority":
+                    if temp_i + 1 < len(args):
+                        priority = args[temp_i + 1]
+                        temp_i += 1
+                    else:
+                        return "Error: Empty priority to search"
+                temp_i += 1
+            
+            try:
+                if id is not None:
+                    id = int(id)
+                if priority is not None:
+                    priority = int(priority)
+            except ValueError:
+                return "search ID and priority must be integer."    
+            
+            return commands.search_cmd(id, desc, priority)
         elif arg == "-t" or arg == "--sort":
             # Show the sorted list by increasing order of priority
             # The task shown must be in the form of 
             # ID,DESCRIPTION,PRIORITY,STATUS
             # Print 'Error: Found extraneous options' if more than 2
             # arguments are added
-            pass
-        elif arg == "-d" or arg == "--desc":
-            # Must be used with -t to specify descending
-            descending = True
-        elif arg == "-i" or arg == "--id":
-            # Must be used with -s for search task with ID
-            pass
-        elif arg == "-dp" or arg == "--description":
-            # Must be used with -s for search task with description
             pass
         
         i += 1
