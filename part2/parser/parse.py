@@ -192,6 +192,15 @@ def parseArgs(args):
             # ID,DESCRIPTION,PRIORITY,STATUS
             # Print 'Error: Found extraneous options' if more than 2
             # arguments are added
-            pass
+            if i + 2 < len(args):
+                return "Error: Found extraneous options"
+            
+            order = ""
+            if i + 1 < len(args):
+                # Check if -d exists
+                if args[i + 1] == "-d" or args[i + 1] == "--desc":
+                    order = "-d"
+            
+            return commands.sort_cmd(order)
         
         i += 1
