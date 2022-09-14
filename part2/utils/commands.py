@@ -41,7 +41,7 @@ def list_all_tasks_cmd():
     tasks = manager.get_all_tasks()
     
     # Task file isn't initialized or is empty
-    if tasks == [] or tasks == None:
+    if tasks == [] or tasks is None:
         return "TODO List empty. Add some tasks."
     
     # Call the parse_tasks_file from manager
