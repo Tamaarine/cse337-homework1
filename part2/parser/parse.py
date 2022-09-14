@@ -190,17 +190,8 @@ def parseArgs(args):
                     else:
                         return "Error: Empty priority to search"
                 else:
-                    tasks = commands.manager.get_all_tasks()
-                    dict_task = commands.manager.parse_tasks_file(tasks)
-                    
-                    ret = ""
-                    for key, val in dict_task.items(): 
-                        desc = val['DESCRIPTION']
-                        priority = val['PRIORITY']
-                        status = val['STATUS']
-                        ret += f"{key},{desc},{priority},{status}\n"
-                    
-                    return ret           
+                    # Encounter an invalid arg done going through it 
+                    break
                 temp_i += 1
             
             try:
